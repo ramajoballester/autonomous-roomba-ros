@@ -1,4 +1,4 @@
-# Autonomous-Roomba-ROS
+# Robotics
 Autonomous Navigation for Roomba robot in ROS and Gazebo
 
 ## Installation
@@ -15,6 +15,8 @@ Install the python packages required
 cd robotics/
 sudo -H pip install -r requirements.txt
 ```
+Clone the [https://github.com/aws-robotics/aws-robomaker-small-house-world](aws-robomaker-small-house-world)
+
 
 ## Examples
 
