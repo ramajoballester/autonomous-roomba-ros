@@ -1,0 +1,93 @@
+<launch>
+
+  <!-- Launch file parameters (can be modified via command line interface) -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="map_selection" default="11"/>
+  <arg name="x_init" default="3"/>
+  <arg name="y_init" default="3"/>
+
+  <!--Gazebo parameters -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics)/worlds/map$(arg map_selection).xml"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Set parameter robot_description -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find robotics)/urdf/create2.xacro'" />
+
+  <!-- Spawn robot model in Gazebo -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model create -x $(arg x_init) -y $(arg y_init) -param robot_description"/>
+
+  <!-- Publishes joints state at certain rate -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+    <param name="rate" value="20"/>
+  </node>
+
+  <!-- Publishes all the tf for the robot -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Spawns a map of the environment -->
+  <node pkg="map_server" type="map_server" args="$(find robotics)/map/map$(arg map_selection).yaml"
+    respawn="true" name="map_server" />
+
+  <!-- Publish localization via Adaptive Monte Carlo method -->
+  <node pkg="amcl" type="amcl" name="amcl" output="screen" args="scan:=scan map:=map">
+    <!-- Set the initial location -->
+    <param name="initial_pose_x" value="$(arg x_init)"/>
+    <param name="initial_pose_y" value="$(arg y_init)"/>
+    <!-- Retrieve map from file -->
+    <param name="use_map_topic" value="false"/>
+    <!-- Set the robot base frame as the frame for de AMCL node -->
+    <param name="base_frame_id" value="base_footprint"/>
+    <!-- Differential traction robot type -->
+    <param name="odom_model_type" value="diff"/>
+    <!-- Sets the tolerance for the tf messages -->
+    <param name="transform_tolerance" value="0.1" />
+    <!-- GUI refresh rate -->
+    <param name="gui_publish_rate" value="10.0"/>
+    <!-- Min and max particles in filter -->
+    <param name="min_particles" value="50"/>
+    <param name="max_particles" value="500"/>
+    <!-- Set laser type (likelihood_field or beam) -->
+    <param name="laser_model_type" value="likelihood_field"/>
+    <!-- Set max distance and angular update values -->
+    <param name="update_min_d" value="0.2"/>
+    <param name="update_min_a" value="0.5"/>
+    <!-- Set odometry frame of reference -->
+    <param name="odom_frame_id" value="odom"/>
+  </node>
+
+  <!-- Autonomous movement node -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- Load configuration files with such things as inflation radius, control frequency, etc -->
+    <rosparam file="$(find robotics)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find robotics)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find robotics)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robotics)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robotics)/config/local_planner_params.yaml" command="load" />
+    <param name="controller_frequency" value="10.0"/>
+    <!-- Local planner for the local plan -->
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+    <!-- Global Planner for the global plan -->
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+    <!-- Set A* as the global planner (if true -> Dijkstra)-->
+    <param name="GlobalPlanner/use_dijkstra" value="false" />
+  </node>
+
+
+  <!-- Show everything in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics)/config/mapping.rviz"
+    respawn="true"/>
+
+</launch>

@@ -1,0 +1,63 @@
+<launch>
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+
+  <!--Gazebo parameters -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find aws_robomaker_small_house_world)/worlds/small_house.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <arg name="robot_ns" value="roomba" />
+  <arg name="x1" value="-4" />
+  <arg name="y1" value="-0.5" />
+  <arg name="x2" value="-5" />
+  <arg name="y2" value="-0.5" />
+  <arg name="x3" value="-6" />
+  <arg name="y3" value="-0.5" />
+  <arg name="x4" value="-7" />
+  <arg name="y4" value="-0.5" />
+
+  <node pkg="map_server" type="map_server" args="$(find aws_robomaker_small_house_world)/maps/turtlebot3_waffle_pi/map.yaml" respawn="true" name="map_server" >
+    <param name="frame_id" value="map" />
+  </node>
+
+   <!-- Show everything in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics)/config/multi.rviz"
+    respawn="false"/>
+
+  <include file="$(find robotics)/launch/one_robot.launch" >
+    <arg name="my_ns" value="$(arg robot_ns)1" />
+    <arg name="x_init" value="$(arg x1)" />
+    <arg name="y_init" value="$(arg y1)" />
+  </include>
+
+  <include file="$(find robotics)/launch/one_robot.launch" >
+    <arg name="my_ns" value="$(arg robot_ns)2" />
+    <arg name="x_init" value="$(arg x2)" />
+    <arg name="y_init" value="$(arg y2)" />
+  </include>
+
+  <include file="$(find robotics)/launch/one_robot.launch" >
+    <arg name="my_ns" value="$(arg robot_ns)3" />
+    <arg name="x_init" value="$(arg x3)" />
+    <arg name="y_init" value="$(arg y3)" />
+  </include>
+
+  <include file="$(find robotics)/launch/one_robot.launch" >
+    <arg name="my_ns" value="$(arg robot_ns)4" />
+    <arg name="x_init" value="$(arg x4)" />
+    <arg name="y_init" value="$(arg y4)" />
+  </include>
+
+
+
+</launch>

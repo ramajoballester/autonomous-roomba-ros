@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<robot>
+
+
+  <!-- <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/roomba</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo> -->
+
+  <!-- Differential drive controller plugin -->
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>50</updateRate>
+      <leftJoint>left_wheel_joint</leftJoint>
+      <rightJoint>right_wheel_joint</rightJoint>
+      <wheelSeparation>0.235</wheelSeparation>
+      <wheelDiameter>0.072</wheelDiameter>
+      <wheelTorque>20</wheelTorque>
+      <wheelAcceleration>5</wheelAcceleration>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+
+  <!-- References to every link in the robot model -->
+  <gazebo reference="base_footprint">
+    <mu1>0</mu1>
+    <mu2>0</mu2>
+  </gazebo>
+
+  <gazebo reference="base_link">
+    <mu1>0</mu1>
+    <mu2>0</mu2>
+  </gazebo>
+
+  <gazebo reference="right_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="roller">
+    <mu1>0</mu1>
+    <mu2>0</mu2>
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <gazebo reference="roller_back">
+    <mu1>0</mu1>
+    <mu2>0</mu2>
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <!-- Create lidar device in Gazebo -->
+  <gazebo reference="lidar">
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <!-- Define lidar characteristics -->
+    <sensor type="ray" name="laser_base">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <!-- Define angular range of scan -->
+            <min_angle>-3.141592</min_angle>
+            <max_angle>3.141592</max_angle>
+          </horizontal>
+        </scan>
+        <!-- Define distance range of scan -->
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <!-- Simulate gaussian noise -->
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <!-- Import Gazebo lidar plugin -->
+      <plugin name="gazebo_ros_head_hokuyo_controller"
+              filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>base_footprint</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="ir">
+    <mu1>0</mu1>
+    <mu2>0</mu2>
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+</robot>

@@ -1,0 +1,38 @@
+<launch>
+
+  <arg name="my_ns" default="create"/>
+  <arg name="x_init" default="0"/>
+  <arg name="y_init" default="0"/>
+
+  <group ns="$(arg my_ns)">
+
+    <!-- Robot URDF / Gazebo description -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find robotics)/urdf/create2.xacro'" />
+
+        <!-- Spawn robot model in Gazebo -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+      args="-urdf -model $(arg my_ns) -x $(arg x_init) -y $(arg y_init) -param robot_description"/>
+
+    <!-- Publishes joints state at certain rate -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="use_gui" value="false"/>
+      <param name="rate" value="20"/>
+    </node>
+
+    <!-- Publishes all the tf for the robot -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <param name="tf_prefix" value="$(arg my_ns)" />
+    </node>
+
+    <include file="$(find robotics)/launch/move_base.launch" >
+      <arg name="my_ns" value="$(arg my_ns)" />
+      <arg name="x_init" value="$(arg x_init)" />
+      <arg name="y_init" value="$(arg y_init)" />
+    </include>
+
+    <node name="bidder" pkg="robotics" type="bidder.py"
+      args="$(arg my_ns)" output="screen" />
+
+  </group>
+
+</launch>

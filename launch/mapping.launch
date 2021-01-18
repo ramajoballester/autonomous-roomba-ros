@@ -1,0 +1,53 @@
+<launch>
+
+  <!-- Launch file parameters (can be modified via command line interface) -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="map_selection" default="11"/>
+  <arg name="x_init" default="1.5"/>
+  <arg name="y_init" default="1.5"/>
+
+  <!--Gazebo parameters -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics)/worlds/map$(arg map_selection).xml"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Set parameter robot_description -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find robotics)/urdf/create2.xacro'" />
+
+  <!-- Spawn robot model in Gazebo -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model create -x $(arg x_init) -y $(arg y_init) -param robot_description"/>
+
+  <!-- Publishes joints state at certain rate -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+    <param name="rate" value="20"/>
+  </node>
+
+  <!-- Publishes all the tf for the robot -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Custom nodes for keyboard velocity commands -->
+  <node name="vel_cmd_publisher" pkg="robotics" type="keyboard_pub.py" respawn="true" />
+
+  <!-- SLAM mapping of the environment -->
+  <node name="mapping" pkg="gmapping" type="slam_gmapping" args="scan:=scan">
+    <param name="base_frame" value="base_link"/>
+    <param name="map_update_interval" value="0.25"/>
+  </node>
+
+  <!-- Show everything in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics)/config/mapping.rviz"
+    respawn="true"/>
+
+</launch>
