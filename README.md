@@ -30,3 +30,15 @@ SLAM mapping launch file
 ``` bash
 roslaunch robotics mapping.launch
 ```
+
+Autonomous navigation
+
+```
+roslaunch robotics autonomous.launch
+```
+
+Autonomous multi-robot navigation and task allocation
+
+```
+roslaunch robotics autonomous_multi_house.launch
+```
