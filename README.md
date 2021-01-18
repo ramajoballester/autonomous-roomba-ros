@@ -30,7 +30,7 @@ SLAM mapping launch file
 ``` bash
 roslaunch robotics mapping.launch
 ```
-![alt text](./images/mapping.png){:height="50%" width="50%"}
+![alt text](./images/mapping.png){:height="50%"}
 
 Autonomous navigation
 
