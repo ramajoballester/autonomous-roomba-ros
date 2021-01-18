@@ -32,6 +32,8 @@ roslaunch robotics mapping.launch
 ```
 ![alt text](./images/mapping.png){:height="50%"}
 
+ <img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous.png" width="400" height="790">
+
 Autonomous navigation
 
 ```
