@@ -15,7 +15,12 @@ Install the python packages required
 cd robotics/
 sudo -H pip install -r requirements.txt
 ```
-Clone the [https://github.com/aws-robotics/aws-robomaker-small-house-world](aws-robomaker-small-house-world)
+Clone the [aws-robomaker-small-house-world package](https://github.com/aws-robotics/aws-robomaker-small-house-world) in the root of your workspace
+
+```
+cd ..
+git clone https://github.com/aws-robotics/aws-robomaker-small-house-world.git
+```
 
 
 ## Examples
