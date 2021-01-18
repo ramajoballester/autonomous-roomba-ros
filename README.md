@@ -30,9 +30,7 @@ SLAM mapping launch file
 ``` bash
 roslaunch robotics mapping.launch
 ```
-![alt text](./images/mapping.png){:height="50%"}
-
- <img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous.png" width="400" height="790">
+<img src="https://github.com/ramajoballester/robotics/blob/main/images/mapping.png" width="600">
 
 Autonomous navigation
 
@@ -40,8 +38,13 @@ Autonomous navigation
 roslaunch robotics autonomous.launch
 ```
 
+<img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous.png" width="600">
+
 Autonomous multi-robot navigation and task allocation
 
 ```
 roslaunch robotics autonomous_multi_house.launch
 ```
+
+<img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous_multi.png" width="600">
+
