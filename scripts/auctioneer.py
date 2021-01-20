@@ -95,11 +95,11 @@ if __name__ == '__main__':
     print('')
 
     # Configuration via terminal (optional)
-    if len(sys.argv) > 1:
-        robot_ns = sys.argv[1]
-
-    if len(sys.argv) > 2:
-        n_robots = int(sys.argv[2])
+    # if len(sys.argv) > 1:
+    #     robot_ns = sys.argv[1]
+    #
+    # if len(sys.argv) > 2:
+    #     n_robots = int(sys.argv[2])
 
     auction = Auction(n_robots, robot_ns, auction_time)
     finished = False
