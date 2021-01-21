@@ -25,14 +25,14 @@ git clone https://github.com/aws-robotics/aws-robomaker-small-house-world.git
 
 ## Examples
 
-SLAM mapping launch file
+### SLAM mapping launch file
 
 ``` bash
 roslaunch robotics mapping.launch
 ```
 <img src="https://github.com/ramajoballester/robotics/blob/main/images/mapping.png" width="600">
 
-Autonomous navigation
+### Autonomous navigation
 
 ```
 roslaunch robotics autonomous.launch
@@ -40,7 +40,9 @@ roslaunch robotics autonomous.launch
 
 <img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous.png" width="600">
 
-Autonomous multi-robot navigation and task allocation. After launching, the system can be initialized and stopped logging with existing user data with ```roslaunch interaccion robots_check.launch``` from [interaccion package](https://github.com/ramajoballester/interaccion)
+### Autonomous multi-robot navigation and task allocation.
+
+After launching, the system can be initialized and stopped logging with existing user data with ```roslaunch interaccion robots_check.launch``` from [interaccion package](https://github.com/ramajoballester/interaccion)
 
 ```
 roslaunch robotics autonomous_multi_house.launch
