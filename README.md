@@ -42,7 +42,7 @@ roslaunch robotics autonomous.launch
 
 ### Autonomous multi-robot navigation and task allocation.
 
-After launching, the system can be initialized and stopped logging with existing user data with ```roslaunch interaccion robots_check.launch``` from [interaccion package](https://github.com/ramajoballester/interaccion)
+After launching, the system can be initialized and stopped by by logging in with existing user data with ```roslaunch interaccion robots_check.launch``` from [interaccion package](https://github.com/ramajoballester/interaccion)
 
 ```
 roslaunch robotics autonomous_multi_house.launch
