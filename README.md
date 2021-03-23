@@ -48,4 +48,3 @@ roslaunch robotics autonomous_multi_house.launch
 
 <img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous_multi.png" width="600">
 
-After launching, the system can be initialized and stopped by by logging in with existing user data with ```roslaunch interaccion robots_check.launch``` from [interaccion package](https://github.com/ramajoballester/interaccion)
