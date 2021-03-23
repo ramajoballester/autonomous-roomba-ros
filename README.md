@@ -1,5 +1,5 @@
 # Robotics
-Autonomous Navigation for Roomba robot in ROS and Gazebo
+Autonomous Navigation framework for mobile robots in ROS and Gazebo
 
 ## Installation
 
