@@ -6,7 +6,7 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
-  <arg name="map_selection" default="11"/>
+  <arg name="map_selection" default="5"/>
   <arg name="x_init" default="3"/>
   <arg name="y_init" default="3"/>
 
@@ -23,6 +23,9 @@
   <!-- Set parameter robot_description -->
   <param name="robot_description"
     command="$(find xacro)/xacro '$(find robotics)/urdf/create2.xacro'" />
+
+  <!-- <param name="robot_description"
+    command="$(find xacro)/xacro '$(find turtlebot3_description)/urdf/turtlebot3_burger.urdf.xacro'" /> -->
 
   <!-- Spawn robot model in Gazebo -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"

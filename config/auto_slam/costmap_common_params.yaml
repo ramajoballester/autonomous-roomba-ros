@@ -1,0 +1,12 @@
+obstacle_range: 5.0
+raytrace_range: 5.0
+# footprint: [[x0, y0], [x1, y1], ... [xn, yn]]
+robot_radius: 0.174
+# robot_radius: 0.05
+# inflation_radius: 0.5
+# cost_scaling_factor: 5.0    # How far from walls (more is further)
+
+observation_sources: laser_scan_sensor
+transform_tolerance: 0.1
+
+laser_scan_sensor: {sensor_frame: lidar, data_type: LaserScan, topic: scan, marking: true, clearing: true}

@@ -1,0 +1,93 @@
+<launch>
+
+  <!-- Launch file parameters (can be modified via command line interface) -->
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="map_selection" default="1"/>
+  <arg name="x_init" default="2.5"/>
+  <arg name="y_init" default="2.5"/>
+
+  <param name="x_init" value="$(arg x_init)"/>
+  <param name="y_init" value="$(arg y_init)"/>
+
+  <!--Gazebo parameters -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find robotics)/worlds/map$(arg map_selection).xml"/>
+    <!-- <arg name="world_name" value="$(find robotics)/worlds/map3_slow.world"/> -->
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Set parameter robot_description -->
+  <param name="robot_description"
+    command="$(find xacro)/xacro '$(find robotics)/urdf/create2.xacro'" />
+
+  <!-- Spawn robot model in Gazebo -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model create -x $(arg x_init) -y $(arg y_init) -param robot_description"/>
+
+  <!-- Publishes joints state at certain rate -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="false"/>
+    <param name="rate" value="20"/>
+  </node>
+
+  <!-- Publishes all the tf for the robot -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Custom nodes for keyboard velocity commands -->
+  <!-- <node name="vel_cmd_publisher" pkg="robotics" type="keyboard_pub.py" respawn="true" /> -->
+
+  <!-- SLAM mapping of the environment -->
+  <node name="mapping" pkg="gmapping" type="slam_gmapping" args="scan:=scan">
+    <param name="base_frame" value="base_link"/>
+    <param name="map_update_interval" value="1.0"/>
+    <param name="particles" value="10"/>
+    <param name="delta" value="0.1"/>
+  </node>
+
+  <!-- Autonomous movement node -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- Load configuration files with such things as inflation radius, control frequency, etc -->
+    <rosparam file="$(find robotics)/config/auto_slam/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find robotics)/config/auto_slam/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find robotics)/config/auto_slam/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robotics)/config/auto_slam/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find robotics)/config/auto_slam/local_planner_params.yaml" command="load" />
+    <param name="controller_frequency" value="10.0"/>
+    <!-- Local planner for the local plan -->
+    <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+    <!-- Global Planner for the global plan -->
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+    <!-- Set A* as the global planner (if true -> Dijkstra)-->
+    <param name="GlobalPlanner/use_dijkstra" value="false" />
+  </node>
+
+  <!-- Environment exploring for Auto SLAM -->
+  <node pkg="explore_lite" type="explore" respawn="false" name="explore" output="log">
+    <param name="robot_base_frame" value="base_link"/>
+    <param name="costmap_topic" value="map"/>
+    <param name="costmap_updates_topic" value="map_updates"/>
+    <param name="visualize" value="true"/>
+    <param name="planner_frequency" value="0.33"/>
+    <param name="progress_timeout" value="90.0"/>
+    <param name="potential_scale" value="30.0"/>
+    <param name="orientation_scale" value="0.0"/>
+    <param name="gain_scale" value="1.0"/>
+    <param name="transform_tolerance" value="0.3"/>
+    <param name="min_frontier_size" value="0.5"/>
+  </node>
+
+  <node name="autoslam_manager" pkg="robotics" type="autoslam_manager.py" output="screen"/>
+
+  <!-- Show everything in Rviz   -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotics)/config/auto_slam.rviz"
+    respawn="true"/>
+
+</launch>

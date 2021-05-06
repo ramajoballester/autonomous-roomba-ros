@@ -1,0 +1,19 @@
+TrajectoryPlannerROS:
+  max_vel_x: 5.0
+  min_vel_x: -5.0
+  max_vel_theta: 4.25
+  min_vel_theta: -4.25
+  min_in_place_vel_theta: 0.0
+
+  acc_lim_theta: 10.0
+  acc_lim_x: 10.0
+  acc_lim_y: 0.0
+  escape_vel: -0.5
+
+  holonomic_robot: false
+  pdist_scale: 1.5      # How close it follows global plan (default: 0.6, max: 5.0)
+  # gdist_scale: 2.0    # How much it follows a local goal (0.8, max 5.0)
+  occdist_scale: 0.01    # How much it avoids obstacles (0.01)
+  yaw_goal_tolerance: 0.2
+  xy_goal_tolerance: 0.2
+  dwa: false
