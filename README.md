@@ -15,12 +15,6 @@ Install the python packages required
 cd robotics/
 sudo -H pip install -r requirements.txt
 ```
-Clone the [aws-robomaker-small-house-world package](https://github.com/aws-robotics/aws-robomaker-small-house-world) in the root of your workspace
-
-```
-cd ..
-git clone https://github.com/aws-robotics/aws-robomaker-small-house-world.git
-```
 
 
 ## Examples
@@ -30,7 +24,6 @@ git clone https://github.com/aws-robotics/aws-robomaker-small-house-world.git
 ``` bash
 roslaunch robotics mapping.launch
 ```
-<img src="https://github.com/ramajoballester/robotics/blob/main/images/mapping.png" width="600">
 
 ### Autonomous navigation
 
@@ -38,13 +31,4 @@ roslaunch robotics mapping.launch
 roslaunch robotics autonomous.launch
 ```
 
-<img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous.png" width="600">
-
-### Autonomous multi-robot navigation and task allocation.
-
-```
-roslaunch robotics autonomous_multi_house.launch
-```
-
-<img src="https://github.com/ramajoballester/robotics/blob/main/images/autonomous_multi.png" width="600">
 
