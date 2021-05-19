@@ -19,9 +19,15 @@ sudo -H pip install -r requirements.txt
 
 ## Examples
 
-### SLAM mapping launch file
+### Autonomous SLAM mapping launch file
 
-``` bash
+```
+roslaunch robotics auto_slam.launch
+```
+
+### Manual SLAM mapping launch file
+
+```
 roslaunch robotics mapping.launch
 ```
 
