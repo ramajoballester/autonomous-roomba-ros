@@ -2,6 +2,7 @@
 <!-- iRobot Roomba 650 model -->
 <robot name="roomba" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  
 <!-- Robot form parameters -->
   <xacro:property name="PI" value="3.141592"/>
   <xacro:property name="wheels_offset" value="0.235"/>
